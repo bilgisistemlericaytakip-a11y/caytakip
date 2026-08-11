@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#2ecc71"><link rel="apple-touch-icon" href="icon-180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Çay Takip">
     <title>🍵 Çay Takip</title>
     <style>
         :root{--pr:#2ecc71;--prd:#27ae60;--gr:#2ecc71;--bl:#3498db;--or:#f39c12;--pu:#9b59b6;--red:#e74c3c;--bg:#f0f5f1;--card:#fff;--inp:#f8faf8;--brd:#d5e8d4;--tx:#2c3e2d;--mt:#7f8c7f;--rad:12px;--sh:0 2px 12px rgba(46,204,113,0.08);--sh2:0 4px 20px rgba(46,204,113,0.12);}
@@ -169,7 +169,7 @@ Dilediğiniz zaman bilgilerinizin düzeltilmesini veya silinmesini isteyebilirsi
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SB_URL='https://octncbkqtfhzpzbbprgt.supabase.co';const SB_KEY='sb_publishable_UdOCGv_sgMw9ls0BcEDfRA_jrjMof1s';const sb=window.supabase.createClient(SB_URL,SB_KEY);
+const SB_URL='https://octncbkqtfhzpzbbprgt.supabase.co';const SB_KEY='sb_publishable_UdOCGv_sgMw9ls0BcEDfRA_jrjMof1s';const sb=window.supabase.createClient(SB_URL,SB_KEY);if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
 const DB={users:'ct_users',persons:'ct_persons',payments:'ct_payments',materials:'ct_materials',invoices:'ct_invoices',carryover:'ct_carryover',logs:'ct_logs'};
 const MONTHS=['','Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
 const MS=['','Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
