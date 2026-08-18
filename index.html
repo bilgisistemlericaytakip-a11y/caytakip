@@ -384,9 +384,10 @@ function autoCarryToNextMonth(yr,mo,netAmount){
   var existing=pays.find(function(x){
     return x.pid===devKisi.id&&x.year===nextYr&&x.month===nextMo&&x.note==='otomatik-devir';
   });
+  var signedAmount=Math.round(netAmount*100)/100;
   if(existing){
-    existing.amount=Math.round(Math.abs(netAmount)*100)/100;
-    existing.status=netAmount>=0?'paid':'unpaid';
+    existing.amount=signedAmount;
+    existing.status='paid';
     existing.pname=devKisi.name;
     existing.updatedAt=now();
   } else {
@@ -396,8 +397,8 @@ function autoCarryToNextMonth(yr,mo,netAmount){
       pname:devKisi.name,
       year:nextYr,
       month:nextMo,
-      amount:Math.round(Math.abs(netAmount)*100)/100,
-      status:netAmount>=0?'paid':'unpaid',
+      amount:signedAmount,
+      status:'paid',
       note:'otomatik-devir',
       created:now()
     });
