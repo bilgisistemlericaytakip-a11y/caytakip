@@ -386,19 +386,28 @@ function renderDash(){
 function autoCarryToNextMonth(yr,mo,netAmount){
   var nextMo=mo===12?1:mo+1;
   var nextYr=mo===12?yr+1:yr;
-  var ps=ld(DB.persons);
-  var devKisi=ps.find(function(p){return p.name.toLowerCase().indexOf('devreden')>=0;});
-  if(!devKisi)return;
+  var ps=ld(DB.persons).filter(function(p){return /devreden/i.test(p.name||'');});
+  if(!ps.length)return;
+  ps.sort(function(a,b){return String(a.id).localeCompare(String(b.id));});
+  var devKisi=ps[0];
+  var devIds=ps.map(function(p){return p.id;});
   var pays=ld(DB.payments);
-  var existing=pays.find(function(x){
-    return x.pid===devKisi.id&&x.year===nextYr&&x.month===nextMo&&x.note==='otomatik-devir';
+  var matches=pays.filter(function(x){
+    return devIds.indexOf(x.pid)>-1&&x.year===nextYr&&x.month===nextMo&&x.note==='otomatik-devir';
   });
   var signedAmount=Math.round(netAmount*100)/100;
-  if(existing){
-    existing.amount=signedAmount;
-    existing.status='paid';
-    existing.pname=devKisi.name;
-    existing.updatedAt=now();
+  var removed=0;
+  if(matches.length){
+    var keep=matches.find(function(x){return x.pid===devKisi.id;})||matches[0];
+    keep.pid=devKisi.id;
+    keep.pname=devKisi.name;
+    keep.amount=signedAmount;
+    keep.status='paid';
+    if(matches.length>1){
+      var dropIds=matches.filter(function(x){return x!==keep;}).map(function(x){return x.id;});
+      pays=pays.filter(function(x){return dropIds.indexOf(x.id)<0;});
+      removed=dropIds.length;
+    }
   } else {
     pays.push({
       id:uid(),
@@ -414,7 +423,8 @@ function autoCarryToNextMonth(yr,mo,netAmount){
   }
   sv(DB.payments,pays);
   var mn=['','Ocak','Subat','Mart','Nisan','Mayis','Haziran','Temmuz','Agustos','Eylul','Ekim','Kasim','Aralik'];
-  if(netAmount!==0){
+  if(removed)toast(removed+' fazla devreden kaydi temizlendi','info');
+  else if(netAmount!==0){
     var sign=netAmount>=0?'+':'';
     toast(mn[nextMo]+' '+nextYr+' Devreden Para: '+sign+fmt(netAmount)+' \u20BA','info');
   }
